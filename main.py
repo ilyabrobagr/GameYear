@@ -1,5 +1,8 @@
 import pygame
 from time import sleep
+import pygame.mixer
+
+pygame.init()
 
 class Object(pygame.sprite.Sprite):
     def __init__(self, img, x, y, speed):
@@ -12,6 +15,10 @@ class Object(pygame.sprite.Sprite):
 
 window = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
 pygame.display.set_caption("Игра года")
+
+pygame.mixer.music.load("sound/bg.mp3")
+pygame.mixer.music.play()
+pygame.mixer.music.set_volume(0.5)
 
 #точка спавна игрока
 start_x = 150
@@ -27,6 +34,8 @@ wall_v = pygame.transform.scale(pygame.image.load("images/wall_v.png"), (32, 64)
 enemy_1_img = pygame.transform.scale(pygame.image.load("images/enemy1.png"), (40, 40))
 enemy_2_img = pygame.transform.scale(pygame.image.load("images/enemy2.png"), (40, 40))
 enemy_3_img = pygame.transform.scale(pygame.image.load("images/enemy3.png"), (40, 40))
+enemy_4_img = pygame.transform.scale(pygame.image.load("images/enemy4.png"), (40, 40))
+enemy_5_img = pygame.transform.scale(pygame.image.load("images/enemy5.png"), (40, 40))
 
 bronezilet_img = pygame.transform.scale(pygame.image.load("images/bronezilet.png"), (40, 40))
 knife_img = pygame.transform.scale(pygame.image.load("images/knife.png"), (40, 40))
@@ -34,6 +43,7 @@ pistolet_img = pygame.transform.scale(pygame.image.load("images/pistolet.png"), 
 pula_img = pygame.transform.scale(pygame.image.load("images/pula.png"), (70, 40))
 ruczac_img = pygame.transform.scale(pygame.image.load("images/ruczac.png"), (40, 40))
 shlem_img = pygame.transform.scale(pygame.image.load("images/shlem.png"), (40, 40))
+
 
 # создание групп объектов
 all_sprites = pygame.sprite.Group()
@@ -66,13 +76,13 @@ all_sprites.add(enemy3)
 
 enemy4_x = 500
 enemy4_y = 425
-enemy4 = Object(enemy_3_img, enemy4_x, enemy4_y, 2)
+enemy4 = Object(enemy_4_img, enemy4_x, enemy4_y, 2)
 enemies.add(enemy4)
 all_sprites.add(enemy4)
 
 enemy5_x = 1175
 enemy5_y = 200
-enemy5 = Object(enemy_1_img, enemy5_x, enemy5_y, 2)
+enemy5 = Object(enemy_5_img, enemy5_x, enemy5_y, 2)
 enemies.add(enemy5)
 all_sprites.add(enemy5)
 
@@ -460,8 +470,13 @@ wall116 = Object(wall_h, 944, 100, 0)
 walls.add(wall116)
 all_sprites.add(wall116)
 
+items_font = pygame.font.Font(None, 40)
+items_text = items_font.render("Нечто: 0", True, pygame.Color("grey"))
+
 run = True
 points = 0
+
+
 
 while run:
     sleep(0.01)
@@ -486,7 +501,7 @@ while run:
         if keys[pygame.K_ESCAPE]:
             run = False
 
-     #чудики решили ходить и биться головой об стенки
+#чудики решили ходить и биться головой об стенки
     enemy1.rect.x += enemy1.speed
     enemy2.rect.y += enemy2.speed
     enemy3.rect.y += enemy3.speed
@@ -507,7 +522,7 @@ while run:
 #получение оружия и тп и тд
     if len(pygame.sprite.spritecollide(player, items, True)) > 0:
         points += 1
-        print(points)
+        items_text = items_font.render(("Нечто: " + str(points)), True, pygame.Color("gray"))
     
     # встреча со стеной
     if len(pygame.sprite.spritecollide(player, walls, False)) > 0:
@@ -521,4 +536,7 @@ while run:
 
     all_sprites.draw(window)
     all_sprites.update()
+
+    window.blit(items_text, (50, 50))
+
     pygame.display.update()
