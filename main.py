@@ -3,7 +3,7 @@ from time import sleep
 import pygame.mixer
 
 from tkinter import *
-from tkinter import messagebox as messagebox
+from tkinter import messagebox as mb
 Tk().wm_withdraw()
 pygame.init()
 
