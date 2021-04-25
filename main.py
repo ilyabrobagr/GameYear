@@ -2,9 +2,12 @@ import pygame
 from time import sleep
 import pygame.mixer
 
+from tkinter import *
+from tkinter import messagebox as messagebox
+Tk().wm_withdraw()
 pygame.init()
 
-class Object(pygame.sprite.Sprite):
+class Object(pygame.sprite.Sprite): 
     def __init__(self, img, x, y, speed):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
@@ -479,6 +482,11 @@ points = 0
 
 
 while run:
+
+    if points == 6:
+        mb.showinfo("Что то", "У вас шиза, если вы это прошли, но поздравляю (с тратой своего времени)!")
+        run = False
+
     sleep(0.01)
     window.blit(bg, (0, 0))
     for event in pygame.event.get():
@@ -530,9 +538,12 @@ while run:
         player.rect.y = start_y
 
     # встреча с чудиком
+    
     if len(pygame.sprite.spritecollide(player, enemies, False)) > 0:
         player.rect.x = start_x
         player.rect.y = start_y
+    
+
 
     all_sprites.draw(window)
     all_sprites.update()
